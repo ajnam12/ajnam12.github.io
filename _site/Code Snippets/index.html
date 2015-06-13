@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Code Snippets</title>
+    <meta name="description" content="My name is Armin Namavari and this is my personal website, where I list some of my past experience,  skills, and other relevant information.
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://yourdomain.com/Code Snippets/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Armin Namavari</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Code Snippets/">Code Snippets</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Code Snippets</h1>
+  </header>
+
+  <article class="post-content">
+    <p>Here, I list some code snippets from previous projects I’ve worked on. </p>
+
+<p>The following is from some of the work I did at the MIIL. The function takes in 
+data from a PET (Positron Emission Tomography) scanner and converts it into a 
+visual representation of the source of radiation. This function was used to
+diagnose problems with the system and visualize the data collected.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">simple_bp</span><span class="p">(</span><span class="n">f_lst</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">mslope</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">first_cathode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    --Description--</span>
+<span class="sd">    Outputs simple unfiltered backprojection</span>
+<span class="sd">    with accompanying system matrix</span>
+<span class="sd">    --Input Details--</span>
+<span class="sd">    f_lst: *.lst file to reconstruct</span>
+<span class="sd">    disp: whether or not to display</span>
+<span class="sd">    mslope: minimum permitted slope in reconstruction</span>
+<span class="sd">    first_cathode: whether or not to include only first cathode events</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c">##### INITIALIZATION #####</span>
+    <span class="n">x1y1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">x2y2</span> <span class="o">=</span> <span class="p">[]</span><span class="c">#coordinates of coincidence events</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f_lst</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">first_cathode</span><span class="p">:</span>
+                <span class="n">c1</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
+                <span class="n">c2</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">9</span><span class="p">:</span><span class="mi">13</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">electrode</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;1&#39;</span> <span class="ow">or</span> <span class="n">electrode</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                    <span class="c">#ignofre if not first cathode</span>
+            <span class="n">x1y1</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">l</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="mi">7</span><span class="p">])]</span> <span class="c">#(x, y) coordinate pair</span>
+            <span class="n">x2y2</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">l</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="mi">16</span><span class="p">])]</span>
+    <span class="c">##### we have finished reading in our coordinates #####</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x1y1</span><span class="p">):</span> <span class="c">#make all coordinates postive for matrix indices</span>
+        <span class="n">x1y1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_MIN</span><span class="p">,</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Y_MIN</span><span class="p">]</span> <span class="c">#the min will be negative </span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x2y2</span><span class="p">):</span>
+        <span class="n">x2y2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_MIN</span><span class="p">,</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Y_MIN</span><span class="p">]</span>
+    <span class="c">##### Initializing the system matrix #####</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">140</span> <span class="o">*</span> <span class="n">SCALE</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">SCALE</span> <span class="p">))</span>
+    <span class="c">##### FINISHED INITIALIZING #####</span>
+     
+    <span class="c">#The system matrix will be a matrix of integers describing the magnitude of</span>
+    <span class="c">#LOR density in that particular pixel. This essentially shows the density of</span>
+    <span class="c">#radioisotopes in the sample tested.</span>
+    <span class="c"># IMPORTANT: (Row, Column) =&gt; (y, x)</span>
+    <span class="n">LORs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x1y1</span><span class="p">,</span> <span class="n">x2y2</span><span class="p">)</span> <span class="c">#zipping together endpoints of LOR</span>
+    <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">LORs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mslope</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">LOR</span> <span class="ow">in</span> <span class="n">LORs</span><span class="p">:</span>
+            <span class="n">backproject</span><span class="p">(</span><span class="n">LOR</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span> <span class="c">#do backprojections on system matrix</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">LOR</span> <span class="ow">in</span> <span class="n">LORs</span><span class="p">:</span>
+            <span class="n">backproject</span><span class="p">(</span><span class="n">LOR</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">min_slope</span><span class="o">=</span><span class="n">mslope</span><span class="p">)</span>
+    <span class="c">##### Displaying System Matrix #####</span>
+    <span class="c">#cmap=&#39;hot&#39;#</span>
+    <span class="k">print</span> <span class="s">&#39;Done, that took </span><span class="si">%f</span><span class="s"> seconds&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">disp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mslope</span><span class="p">:</span>
+            <span class="n">pl</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Minimum Slope Permitted: </span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mslope</span><span class="p">))</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+         
+        <span class="k">return</span> <span class="n">system</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">system</span></code></pre></div>
+
+<p>Here is a sample of some of my GUI code from the same project. This class allows matplotlib graphs
+to be displayed in the GUI. The GUI itself provides testing and debugging procedures for the PET system. </p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MPLPanel</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_flood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DataAcquired</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FHAcquired</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+        <span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="o">|</span><span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizerAndFit</span><span class="p">(</span><span class="n">sizer</span><span class="p">)</span>
+        <span class="c">#self.canvas.Centre()</span>
+    <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NBRC</span><span class="p">,</span> <span class="n">f_unpacked</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">f_calib</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">numLines</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">7</span><span class="p">,</span> <span class="n">kev</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="c">#self.figure.clf(keep_observers=True)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataAcquired</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;ACQUIRING DATA&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">energyhist</span><span class="o">.</span><span class="n">energydata</span><span class="p">(</span><span class="n">f_unpacked</span><span class="p">,</span> <span class="n">f_calib</span><span class="p">,</span> <span class="n">numLines</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DataAcquired</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">print</span> <span class="s">&#39;DATA ACQUIRED&#39;</span>
+        <span class="k">if</span> <span class="n">kev</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">NBRC</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">bins</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s">&#39;step&#39;</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Energy (ADC)&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">NBRC</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">bins</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s">&#39;step&#39;</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Energy (keV)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;Energy Distribution&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_dist</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Counts&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;ENERGY DISTRIBUTION GRAPHED&#39;</span>
+    <span class="k">def</span> <span class="nf">flood_hist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">f_acp</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">FHAcquired</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;ACQUIRING DATA&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fhdata</span> <span class="o">=</span> <span class="n">activity</span><span class="p">(</span><span class="n">f_acp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FHAcquired</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">print</span> <span class="s">&#39;DATA ACQUIRED&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_flood</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fhdata</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="n">board</span><span class="p">])</span>
+        <span class="c">#self.axes_flood.set_title(&#39;Flood Histogram of Coincidence Pairs&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_flood</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Anode Number&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes_flood</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Cathode Number&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;FLOOD HISTOGRAM GENERATED&#39;</span></code></pre></div>
+
+<p>Here’s Prim’s minimum spanning tree algorithm, which I had to code up for the algorithms coursera course</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;edgesmst.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">edges</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">line</span>
+            <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+        <span class="n">vertices</span><span class="p">[</span><span class="n">v1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">vertices</span><span class="p">[</span><span class="n">v1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">v2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+        <span class="n">vertices</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">vertices</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
+<span class="k">def</span> <span class="nf">prims</span><span class="p">(</span><span class="n">elist</span><span class="p">,</span> <span class="n">vs</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">vs</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span><span class="c">#list of ints representing vertices</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">[]</span><span class="c">#list of edges</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="c">#total vertices</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span><span class="c">#u is an int</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span><span class="c">#v is a tuple (other-vertex, weight)</span>
+                <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
+                    <span class="n">es</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+                    <span class="c">#add to list of edges</span>
+        <span class="n">emin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="c">#edge of min cost</span>
+        <span class="n">T</span> <span class="o">+=</span> <span class="p">[</span><span class="n">emin</span><span class="p">]</span>                   
+        <span class="n">X</span> <span class="o">+=</span> <span class="p">[</span><span class="n">emin</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">cost</span> <span class="o">+=</span> <span class="n">emin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">print</span> <span class="n">cost</span>
+    <span class="k">return</span> <span class="n">T</span>
+<span class="k">print</span> <span class="n">prims</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span></code></pre></div>
+
+<p>From my adventures in functional programming. This version of quicksort, written in Scheme (<em>shudders</em>
+… so many parentheses …) is inspired by the version featured
+on the Haskell website when I was exploring that language. (Assume filter has previously been defined)</p>
+
+<div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">qsort</span> <span class="nv">lyst</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">null? </span><span class="nv">lyst</span><span class="p">)</span>
+      <span class="nv">lyst</span>
+      <span class="p">(</span><span class="nb">append </span><span class="p">(</span><span class="nf">qsort</span> <span class="p">(</span><span class="nf">filter</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt;= </span><span class="nv">x</span> <span class="p">(</span><span class="nb">car </span><span class="nv">lyst</span><span class="p">)))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">lyst</span><span class="p">)))</span>
+              <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nb">car </span><span class="nv">lyst</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nf">qsort</span> <span class="p">(</span><span class="nf">filter</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt; </span><span class="nv">x</span> <span class="p">(</span><span class="nb">car </span><span class="nv">lyst</span><span class="p">)))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">lyst</span><span class="p">)))))))</span></code></pre></div>
+
+<p>Here’s code I wrote from a small java applet that simulates projectile motion (and conservation of momentum, when the 
+“ball” bounces off of the edges)</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.applet.Applet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.Color</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.Graphics</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JApplet</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProjMot</span> <span class="kd">extends</span> <span class="n">JApplet</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
+	
+	<span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> 
+	<span class="kt">double</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">400</span><span class="o">;</span> 
+	<span class="kt">double</span> <span class="n">vx</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span> 
+	<span class="kt">double</span> <span class="n">vy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">25</span><span class="o">;</span> 
+	<span class="kt">double</span> <span class="n">grav</span> <span class="o">=</span> <span class="o">.</span><span class="mi">7</span><span class="o">;</span>  
+	<span class="n">Thread</span> <span class="n">runner</span><span class="o">;</span> 
+	
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(){</span>
+		<span class="n">setSize</span><span class="o">(</span><span class="mi">500</span><span class="o">,</span> <span class="mi">500</span><span class="o">);</span> 
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">(){</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">runner</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">runner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+			<span class="n">runner</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">stop</span><span class="o">(){</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">runner</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">runner</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+			<span class="n">runner</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">){</span>
+			<span class="n">setBackground</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">);</span> 
+			<span class="n">repaint</span><span class="o">();</span> 
+			<span class="k">if</span><span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="n">getWidth</span><span class="o">()</span> <span class="o">||</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span>
+				<span class="n">vx</span><span class="o">*=-</span><span class="mi">1</span><span class="o">;</span> 
+			<span class="o">}</span>
+			<span class="k">if</span><span class="o">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="n">getHeight</span><span class="o">()</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span>
+				<span class="n">vy</span><span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> 
+			<span class="o">}</span>
+			<span class="n">vy</span> <span class="o">+=</span> <span class="n">grav</span><span class="o">;</span> 
+			<span class="n">x</span><span class="o">+=</span><span class="n">vx</span><span class="o">;</span> 
+			<span class="n">y</span><span class="o">+=</span><span class="n">vy</span><span class="o">;</span> 
+			
+			<span class="k">try</span><span class="o">{</span> <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">20</span><span class="o">);}</span>
+			<span class="k">catch</span><span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+			
+		<span class="o">}</span>
+		
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">paint</span><span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">){</span>
+		<span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">);</span> 
+		<span class="c1">//g.fillRect(0, 0, getWidth(), getHeight()); </span>
+		<span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">RED</span><span class="o">);</span> 
+		<span class="n">g</span><span class="o">.</span><span class="na">fillOval</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span><span class="n">x</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">y</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Armin Namavari</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Armin Namavari</li>
+          <li><a href="mailto:arminn "at" stanford "dot" edu">arminn "at" stanford "dot" edu</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">My name is Armin Namavari and this is my personal website, where I list some of my past experience,  skills, and other relevant information.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
