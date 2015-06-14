@@ -176,6 +176,26 @@ print prims(edges, vertices)
 
 {% endhighlight %}
 
+Here's python code I wrote (just for fun) that outputs all permutations of a list (of distinct elements
+-- we could handle lists that have certain identical elements with a simple conditional in the middle).
+Interestingly enough, this version utilizes elements of both recursion and iteration. 
+
+{% highlight python %}
+
+def permutations(lst):
+    perms = []
+    if len(lst) <= 1:
+        perms += [lst]
+    else:
+        for i in range(len(lst)):
+            temp = lst[i]
+            lst[i] = lst[0]
+            lst[0] = temp
+            perms += [[lst[0]] + p for p in permutations(lst[1:])]
+    return perms
+
+{% endhighlight %}
+
 From my adventures in functional programming. This version of quicksort, written in Scheme (*shudders*
 ... so many parentheses ...) is inspired by the version featured
 on the Haskell website when I was exploring that language. (Assume filter has previously been defined)
