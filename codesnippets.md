@@ -196,6 +196,22 @@ def permutations(lst):
 
 {% endhighlight %}
 
+Here's python code I wrote that generates all subsets of a given list:
+
+{% highlight python %}
+
+def subsets(lst):
+    if len(lst) == 0:
+        return [lst]
+    elif len(lst) == 1:
+        return [[], lst]
+    else:
+        subs = []
+        subs += [[lst[0]] + s for s in subsets(lst[1:])]
+        subs += subsets(lst[1:])
+        return subs
+
+{% endhighlight %}
 From my adventures in functional programming. This version of quicksort, written in Scheme (*shudders*
 ... so many parentheses ...) is inspired by the version featured
 on the Haskell website when I was exploring that language. (Assume filter has previously been defined)
