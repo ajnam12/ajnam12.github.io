@@ -212,7 +212,7 @@ def subsets(lst):
         return subs
 
 {% endhighlight %}
-From my adventures in functional programming. This version of quicksort, written in Scheme (*shudders*
+From my adventures in functional programming... This version of quicksort, written in Scheme (*shudders*
 ... so many parentheses ...) is inspired by the version featured
 on the Haskell website when I was exploring that language. (Assume filter has previously been defined)
 
