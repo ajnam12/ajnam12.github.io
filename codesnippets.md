@@ -207,8 +207,9 @@ def subsets(lst):
         return [[], lst]
     else:
         subs = []
-        subs += [[lst[0]] + s for s in subsets(lst[1:])]
-        subs += subsets(lst[1:])
+        cdrsubs = subsets(lst[1:])
+        subs += [[lst[0]] + s for s in cdrsubs]
+        subs += cdrsubs
         return subs
 
 {% endhighlight %}
