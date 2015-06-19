@@ -80,6 +80,8 @@ def simple_bp(f_lst, disp=True, mslope=None, first_cathode=False):
         return system
 {% endhighlight %}
 
+![Alt text](/images/dls_recon.png "Sample Output of the Above Function")
+
 Here is a sample of some of my GUI code from the same project. This class allows matplotlib graphs
 to be displayed in the GUI. The GUI itself provides testing and debugging procedures for the PET system. 
 
@@ -130,6 +132,8 @@ class MPLPanel(wx.Panel):
         print 'FLOOD HISTOGRAM GENERATED'
 
 {% endhighlight %}
+
+![Alt text](/images/GUIPVCZT.png "Screenshot of the Full GUI")
 
 Here's Prim's minimum spanning tree algorithm, which I had to code up for the algorithms coursera course
 
@@ -290,3 +294,5 @@ public class ProjMot extends JApplet implements Runnable{
 	}
 }
 {% endhighlight %}
+
+![Alt text](/images/projmot.png "Screenshot of Animation")

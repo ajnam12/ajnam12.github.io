@@ -135,6 +135,8 @@ diagnose problems with the system and visualize the data collected.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">system</span></code></pre></div>
 
+<p><img src="/images/dls_recon.png" alt="Alt text" title="Sample Output of the Above Function" /></p>
+
 <p>Here is a sample of some of my GUI code from the same project. This class allows matplotlib graphs
 to be displayed in the GUI. The GUI itself provides testing and debugging procedures for the PET system. </p>
 
@@ -181,6 +183,8 @@ to be displayed in the GUI. The GUI itself provides testing and debugging proced
         <span class="bp">self</span><span class="o">.</span><span class="n">axes_flood</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Cathode Number&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
         <span class="k">print</span> <span class="s">&#39;FLOOD HISTOGRAM GENERATED&#39;</span></code></pre></div>
+
+<p><img src="/images/GUIPVCZT.png" alt="Alt text" title="Screenshot of the Full GUI" /></p>
 
 <p>Here’s Prim’s minimum spanning tree algorithm, which I had to code up for the algorithms coursera course</p>
 
@@ -239,7 +243,21 @@ Interestingly enough, this version utilizes elements of both recursion and itera
             <span class="n">perms</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">lst</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
     <span class="k">return</span> <span class="n">perms</span></code></pre></div>
 
-<p>From my adventures in functional programming. This version of quicksort, written in Scheme (<em>shudders</em>
+<p>Here’s python code I wrote that generates all subsets of a given list:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">subsets</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">lst</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[[],</span> <span class="n">lst</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cdrsubs</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">subs</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">lst</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cdrsubs</span><span class="p">]</span>
+        <span class="n">subs</span> <span class="o">+=</span> <span class="n">cdrsubs</span>
+        <span class="k">return</span> <span class="n">subs</span></code></pre></div>
+
+<p>From my adventures in functional programming… This version of quicksort, written in Scheme (<em>shudders</em>
 … so many parentheses …) is inspired by the version featured
 on the Haskell website when I was exploring that language. (Assume filter has previously been defined)</p>
 
@@ -311,6 +329,8 @@ on the Haskell website when I was exploring that language. (Assume filter has pr
 
 	<span class="o">}</span>
 <span class="o">}</span></code></pre></div>
+
+<p><img src="/images/projmot.png" alt="Alt text" title="Screenshot of Animation" /></p>
 
   </article>
 
