@@ -3,7 +3,7 @@ title: Armin Namavari
 email: arminn "at" stanford "dot" edu
 description: > # this means to ignore newlines until "baseurl:"
  My name is Armin Namavari and this is my personal website, where I list some of my past experience, 
- skills, and other relevant information.
+ skills, and other relevant information/stuff.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
