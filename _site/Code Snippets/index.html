@@ -186,50 +186,8 @@ to be displayed in the GUI. The GUI itself provides testing and debugging proced
 
 <p><img src="/images/GUIPVCZT.png" alt="Alt text" title="Screenshot of the Full GUI" /></p>
 
-<p>Here’s Prim’s minimum spanning tree algorithm, which I had to code up for the algorithms coursera course</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;edgesmst.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">edges</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">line</span>
-            <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-<span class="n">vertices</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">v1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
-        <span class="n">vertices</span><span class="p">[</span><span class="n">v1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">vertices</span><span class="p">[</span><span class="n">v1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="n">v2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
-        <span class="n">vertices</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">vertices</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span>
-<span class="k">def</span> <span class="nf">prims</span><span class="p">(</span><span class="n">elist</span><span class="p">,</span> <span class="n">vs</span><span class="p">):</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">vs</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span><span class="c">#list of ints representing vertices</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="p">[]</span><span class="c">#list of edges</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="c">#total vertices</span>
-    <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
-    <span class="k">while</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
-        <span class="n">es</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span><span class="c">#u is an int</span>
-            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span><span class="c">#v is a tuple (other-vertex, weight)</span>
-                <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
-                    <span class="n">es</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-                    <span class="c">#add to list of edges</span>
-        <span class="n">emin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="c">#edge of min cost</span>
-        <span class="n">T</span> <span class="o">+=</span> <span class="p">[</span><span class="n">emin</span><span class="p">]</span>                   
-        <span class="n">X</span> <span class="o">+=</span> <span class="p">[</span><span class="n">emin</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">cost</span> <span class="o">+=</span> <span class="n">emin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">print</span> <span class="n">cost</span>
-    <span class="k">return</span> <span class="n">T</span>
-<span class="k">print</span> <span class="n">prims</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span></code></pre></div>
-
 <p>Here’s python code I wrote (just for fun) that outputs all permutations of a list (of distinct elements
-– we could handle lists that have certain identical elements with a simple conditional in the middle).
-Interestingly enough, this version utilizes elements of both recursion and iteration. </p>
+– we could handle lists that have certain identical elements with a simple conditional in the middle).</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">permutations</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
     <span class="n">perms</span> <span class="o">=</span> <span class="p">[]</span>
@@ -268,69 +226,6 @@ on the Haskell website when I was exploring that language. (Assume filter has pr
               <span class="p">(</span><span class="nb">cons </span><span class="p">(</span><span class="nb">car </span><span class="nv">lyst</span><span class="p">)</span>
                     <span class="p">(</span><span class="nf">qsort</span> <span class="p">(</span><span class="nf">filter</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt; </span><span class="nv">x</span> <span class="p">(</span><span class="nb">car </span><span class="nv">lyst</span><span class="p">)))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">lyst</span><span class="p">)))))))</span></code></pre></div>
 
-<p>Here’s code I wrote from a small java applet that simulates projectile motion (and conservation of momentum, when the 
-“ball” bounces off of the edges)</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.applet.Applet</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.awt.Color</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.awt.Graphics</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.swing.JApplet</span><span class="o">;</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProjMot</span> <span class="kd">extends</span> <span class="n">JApplet</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
-	
-	<span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> 
-	<span class="kt">double</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">400</span><span class="o">;</span> 
-	<span class="kt">double</span> <span class="n">vx</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span> 
-	<span class="kt">double</span> <span class="n">vy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">25</span><span class="o">;</span> 
-	<span class="kt">double</span> <span class="n">grav</span> <span class="o">=</span> <span class="o">.</span><span class="mi">7</span><span class="o">;</span>  
-	<span class="n">Thread</span> <span class="n">runner</span><span class="o">;</span> 
-	
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(){</span>
-		<span class="n">setSize</span><span class="o">(</span><span class="mi">500</span><span class="o">,</span> <span class="mi">500</span><span class="o">);</span> 
-	<span class="o">}</span>
-	
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">(){</span>
-		<span class="k">if</span> <span class="o">(</span><span class="n">runner</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-			<span class="n">runner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-			<span class="n">runner</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-		<span class="o">}</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">stop</span><span class="o">(){</span>
-		<span class="k">if</span> <span class="o">(</span><span class="n">runner</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-			<span class="n">runner</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
-			<span class="n">runner</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-		<span class="o">}</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">){</span>
-			<span class="n">setBackground</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">);</span> 
-			<span class="n">repaint</span><span class="o">();</span> 
-			<span class="k">if</span><span class="o">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="n">getWidth</span><span class="o">()</span> <span class="o">||</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span>
-				<span class="n">vx</span><span class="o">*=-</span><span class="mi">1</span><span class="o">;</span> 
-			<span class="o">}</span>
-			<span class="k">if</span><span class="o">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="n">getHeight</span><span class="o">()</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">){</span>
-				<span class="n">vy</span><span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> 
-			<span class="o">}</span>
-			<span class="n">vy</span> <span class="o">+=</span> <span class="n">grav</span><span class="o">;</span> 
-			<span class="n">x</span><span class="o">+=</span><span class="n">vx</span><span class="o">;</span> 
-			<span class="n">y</span><span class="o">+=</span><span class="n">vy</span><span class="o">;</span> 
-			
-			<span class="k">try</span><span class="o">{</span> <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">20</span><span class="o">);}</span>
-			<span class="k">catch</span><span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-			
-		<span class="o">}</span>
-		
-	<span class="o">}</span>
-	
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">paint</span><span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">){</span>
-		<span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">);</span> 
-		<span class="c1">//g.fillRect(0, 0, getWidth(), getHeight()); </span>
-		<span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">RED</span><span class="o">);</span> 
-		<span class="n">g</span><span class="o">.</span><span class="na">fillOval</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span><span class="n">x</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">y</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
-
-	<span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-
-<p><img src="/images/projmot.png" alt="Alt text" title="Screenshot of Animation" /></p>
 
   </article>
 
