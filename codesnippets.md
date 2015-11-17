@@ -162,11 +162,8 @@ def subsets(lst):
     if len(lst) == 0:
         return [lst]
     else:
-        subs = []
         cdrsubs = subsets(lst[1:])
-        subs += [[lst[0]] + s for s in cdrsubs]
-        subs += cdrsubs
-        return subs
+        return cdrsubs + [[lst[0]] + s for s in cdrsubs]
 
 {% endhighlight %}
 From my adventures in functional programming... This version of quicksort, written in Scheme (*shudders*
