@@ -161,8 +161,6 @@ Here's python code I wrote that generates all subsets of a given list:
 def subsets(lst):
     if len(lst) == 0:
         return [lst]
-    elif len(lst) == 1:
-        return [[], lst]
     else:
         subs = []
         cdrsubs = subsets(lst[1:])
