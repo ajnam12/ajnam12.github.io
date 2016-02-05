@@ -135,6 +135,27 @@ class MPLPanel(wx.Panel):
 
 ![Alt text](/images/GUIPVCZT.png "Screenshot of the Full GUI")
 
+The code below is part of a LaTeX template generator for CS109 PSets that takes the raw text of the PSet and spits out a (mostly) properly formatted version in LaTeX in order to minimize cumbersome copying and pasting
+
+{% highlight python%}
+
+def cs109_pset(text):
+    num_split = re.split('\n\d\. |\n\d\d\. ', text)[1:] #split by problem number
+    char_split = map(lambda x: re.split('\n[a-z]\.', x), num_split) #split by subpart
+    problems = ""
+    for i, problem in enumerate(char_split):
+        problems += '\n    %Problem {0}\n'.format(i+1)
+        problems += Template('    \item $desc\n').substitute(desc=problem[0].replace('\n', ' '))
+        if(len(problem) == 1):
+            continue #no subparts
+        problems += '    \\begin{enumerate}\n'
+        for subpart in problem[1:]:#add subparts to enumeration
+            problems += Template('      \item $desc\n').substitute(desc=subpart.replace('\n', ' '))
+        problems += '    \end{enumerate}\n'
+    return Template(CS109_TEMPLATE).substitute(probs=problems)
+
+{% endhighlight %}
+
 Here's python code I wrote (just for fun) that outputs all permutations of a list (of distinct elements
 -- we could handle lists that have certain identical elements with a simple conditional in the middle).
 
